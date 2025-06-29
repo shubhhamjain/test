@@ -1,0 +1,42 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Download Order Summary</title>
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+  <style>
+    body { font-family: sans-serif; background: #f4f4f4; display: flex; justify-content: center; padding: 50px; }
+    #summary { background: white; padding: 20px; border-radius: 10px; width: 100%; max-width: 400px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    button { margin-top: 20px; padding: 10px 20px; font-size: 16px; border: none; background: #111; color: white; border-radius: 6px; cursor: pointer; }
+    button:hover { background: #333; }
+  </style>
+</head>
+<body>
+  <div>
+    <div id="summary">
+      <h2>Order #<span id="order-id"></span></h2>
+      <p><strong>Name:</strong> <span id="name"></span></p>
+      <p><strong>Email:</strong> <span id="email"></span></p>
+      <p><strong>Total:</strong> ₹<span id="total"></span></p>
+    </div>
+    <button onclick="downloadScreenshot()">Download as Image</button>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    document.getElementById("order-id").textContent = params.get("order") || "—";
+    document.getElementById("name").textContent = params.get("name") || "—";
+    document.getElementById("email").textContent = params.get("email") || "—";
+    document.getElementById("total").textContent = params.get("total") || "—";
+
+    function downloadScreenshot() {
+      html2canvas(document.getElementById("summary")).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "order-summary.png";
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    }
+  </script>
+</body>
+</html>
